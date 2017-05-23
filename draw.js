@@ -7,6 +7,7 @@ var food = [];
 var enemies = [];
 var totalEnemies = 0;
 var totalFood = 5;
+var frequency;
 
 var levels;
 
@@ -38,15 +39,41 @@ function setup() {
 
 function draw() {
   background(29, 26, 49);
+  // background(255);
 
   // Levels
   // Level 1
-  if (score >= 30 && levels[0]) {
+  if (score >= 20 && levels[0]) {
     totalEnemies++;
     enemies.push(new Enemy(floor(random(400)), floor(random(400))));
     levels[0] = false;
   }
 
+  if (score >= 0) {
+    obstacle.draw();
+    obstacle.bounds(height);
+    obstacle.move();
+    obstacle.activated = true;
+
+    frequency = floor(random(480)) + 60;
+
+    if (frameCount % frequency == 0) {
+      obstacle.toggleActivation();
+    }
+    if (frameCount % 240 == 0) {
+      obstacle.toggleActivation();
+    }
+
+    // if (obstacle.getActivated()) {
+    //   // console.log("P: ", player.position.y);
+    //   // console.log("O: ", obstacle.position.y);
+    //   if (
+    //       (player.position.y >= obstacle.position.y) && (player.position.y <= obstacle.position.y)
+    //     ) {
+    //     console.log("dsd");
+    //   }
+    // }
+  }
 
   // Mouse pointer
   noCursor();
