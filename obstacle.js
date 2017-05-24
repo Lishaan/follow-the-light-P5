@@ -7,7 +7,7 @@ function Obstacle() {
 	this.bounds = function(height) {
 		if (this.position.y > height) {
 			this.position.y = 0;
-		} 
+		}
 	}
 
 	this.move = function() {

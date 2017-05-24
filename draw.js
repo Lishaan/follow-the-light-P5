@@ -15,12 +15,15 @@ var obstacle;
 
 function setupGame() {
 
+  // frameRate(5);
+
   levels = [true, true, true, true, true];
 
   obstacle = new Obstacle();
 
   food = [];
   enemies = [];
+  totalEnemies = 0;
 
   player = new Mover(width/2, height/2);
   for (var i = 0; i < totalFood; i++) food.push(new Food());
@@ -43,13 +46,14 @@ function draw() {
 
   // Levels
   // Level 1
-  if (score >= 20 && levels[0]) {
-    totalEnemies++;
+  if (score >= 10) {
+    totalEnemies = 1;
     enemies.push(new Enemy(floor(random(400)), floor(random(400))));
     levels[0] = false;
   }
 
-  if (score >= 0) {
+  // Level 2
+  if (score >= 20) {
     obstacle.draw();
     obstacle.bounds(height);
     obstacle.move();
@@ -60,19 +64,26 @@ function draw() {
     if (frameCount % frequency == 0) {
       obstacle.toggleActivation();
     }
+
     if (frameCount % 240 == 0) {
       obstacle.toggleActivation();
     }
 
-    // if (obstacle.getActivated()) {
-    //   // console.log("P: ", player.position.y);
-    //   // console.log("O: ", obstacle.position.y);
-    //   if (
-    //       (player.position.y >= obstacle.position.y) && (player.position.y <= obstacle.position.y)
-    //     ) {
-    //     console.log("dsd");
-    //   }
-    // }
+    // Check for clashing when obstacle is activated
+    if (obstacle.getActivated()) {
+
+
+      var distance = 10;
+
+      if (
+        player.position.y >= (obstacle.position.y-30) &&
+        player.position.y <= (obstacle.position.y+30) 
+        ) {
+        console.log("Player Y: ", player.position.y);
+        console.log("Obstacle Y: ", obstacle.position.y);
+        setupGame();
+      }
+    }
   }
 
   // Mouse pointer
@@ -108,10 +119,10 @@ function draw() {
   // Enemies
   for (var i = 0; i < totalEnemies; i++) {
 
-    var playerVector = createVector(player.position.x, player.position.y);
+    var playerPosition = createVector(player.position.x, player.position.y);
 
     enemies[i].display();
-    enemies[i].seek(playerVector);
+    enemies[i].seek(playerPosition);
     enemies[i].update();
 
     // Check for clashing or Losing
